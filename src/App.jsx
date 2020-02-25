@@ -1,58 +1,16 @@
-import React, { Component, createContext } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-const BatteryContext = createContext();
-const OnlineContext = createContext();
-// function App() {
 
-//   return (
-//     <BatteryContext.Provider value={60}>
-//       <Middle />
-//     </BatteryContext.Provider>
-//   );
-// }
-// function Middle() {
-//   return <Last />
-// }
-
-// function Last() {
-//   return (
-//     <BatteryContext.Consumer>
-//       {battery => <h1>battery:{battery}</h1>}
-//     </BatteryContext.Consumer>
-//   )
-// }
-
+const About = lazy(() => import("./About.jsx"));
 class App extends Component {
-  state = { battery: 60, online: false }
   render() {
-    const { battery, online } = this.state;
     return (
-      <BatteryContext.Provider value={battery}>
-        <OnlineContext.Provider value={online}>
-          <button onClick={() => {
-            this.setState({ battery: battery - 1 })
-          }}>按钮</button>
-          <button onClick={() => {
-            this.setState({ online: !online })
-          }}>按钮1</button>
-          <Middle />
-        </OnlineContext.Provider>
-      </BatteryContext.Provider>
+      <Suspense fallback={<div>loading</div>}>
+        <About />
+      </Suspense>
     )
-  }
-}
-class Middle extends Component {
-  render() {
-    return <Last />
-  }
-}
-class Last extends Component {
-  static contextType = BatteryContext;
-  render() {
-    const battery = this.context;
-    return <h1>battery:{battery}</h1>
   }
 }
 export default App;
