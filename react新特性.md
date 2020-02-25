@@ -66,8 +66,8 @@ static getDerivedStateFromError(){
 }
 ```
 ### memo
-类似PureComponent 优化渲染性能--针对组件是否需要重新渲染
-PureComponent只能检测到state的第一级变化，才能控制是否要重新渲染，多级就失效
+类似PureComponent 优化渲染性能--针对组件是否需要重新渲染  
+PureComponent只能检测到state的第一级变化，才能控制是否要重新渲染，多级就失效  
 mome针对无状态组件
 ```js
 const Foo = memo(function Foo(props) {
