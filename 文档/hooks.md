@@ -27,7 +27,7 @@ function App(props) {
 }
 ```
 ### useEffect
-当视图变化（副作用）,该钩子会执行
+当视图变化（副作用）,该钩子会执行  
 useEffect传的参数，可以控制是否需要执行函数体，一般只希望只想一次，传递一空数组
 ```js
 class App extends Component {
@@ -94,5 +94,45 @@ function App_(){
       {count%2?<span id="log">{size.width}X{size.height}</span>:<p id="log">{size.width}X{size.height}</p>}
     </div>
   )
+}
+```
+### useContext
+针对函数组件里面，不能使用contextType而使用useContext
+```js
+const CountContext = createContext()
+function App(){
+  const [count,setCount] = useState(0)
+  return(
+    <div>
+      <button onClick={()=>setCount(count+1)}>count:{count}</button>
+      <CountContext.Provider value={count}>
+        <Child/>
+        <ChildType/>
+        <Count/>
+      </CountContext.Provider>
+    </div>
+  )
+}
+class Child extends Component{
+    render(){
+    return (
+      <CountContext.Consumer>
+        {count=><h1>{count}</h1>}
+      </CountContext.Consumer>
+    )    
+  } 
+}
+class ChildType extends Component{
+ static contextType = CountContext
+  render(){
+    const count = this.context
+    return (
+      <h1>{count}</h1>
+    )    
+} 
+}
+function Count(){
+  const count = useContext(CountContext)//直接传入创建的context
+  return <h1>{count}</h1>  
 }
 ```
