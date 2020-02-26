@@ -1,48 +1,59 @@
-import React, { Component, useState,useMemo,useEffect,memo,useCallback, useRef, PureComponent} from 'react';
-function App(){
-  const [count,setCount] = useState(0)
-  const double = useMemo(()=>{//这里可以控制是否重新计算了
-    return count * 2
-  },[count===3])
-  const countRef = useRef()
-  // let it
-  let it = useRef();
-  const onClick = useCallback(()=>{
-    countRef.current.speak()
-  },[countRef])
-  useEffect(()=>{//创见一个定时器
-    // it = setInterval(()=>{
-    //     setCount(count=>count+1)
-    // },1000)
-    it.current = setInterval(()=>{
-        setCount(count=>count+1)
-    },1000)
-  },[])
-  useEffect(()=>{
-    if(count>=10){
-      // clearInterval(it)
-      clearInterval(it.current)
-    }
-  })
-  return(
+import React, { Component, useState, useMemo, useEffect, memo, useCallback, useRef, PureComponent } from 'react';
+function App() {
+  const [count, setCount] = useCount(0)
+  const Counter = useCounter(count)
+  const size = useSize()
+  console.log(count)
+  return (
     <div>
-      <button onClick={()=>setCount(count+1)}>count:{count},double:{double}</button>
-      <Count count={double} onClick={onClick} ref={countRef}/>
+      <button onClick={() => setCount(count + 1)}>count:{count}width:{size.width}X{size.height}</button>
+      <Count count={count} />
+      {Counter}
     </div>
   )
 }
-class Count extends PureComponent{
-  speak(){
-    console.log(`hello count is ${this.props.count}`)
-  }
-  render(){
-    const {props} = this;
-    return <h1 onClick={props.onClick}>{props.count}</h1>  
-  }
+function useCounter(count) {
+  const size = useSize()
+  return <h1>{count},{size.width}X{size.height}</h1>
 }
-// const Count = memo(function Count(props){
-//   console.log("render count")
-//   return <h1 onClick={props.onClick}>{props.count}</h1>  
-// })
+// class Count extends PureComponent {
+//   render() {
+//     const size = useSize()
+//     console.log(size)
+//     const { props } = this;
+//     return <h1>{props.count},{size.width}X{size.height}</h1>
+//   }
+// }
+function Count(props){
+    const size = useSize()
+  return <h1>{props.count},{size.width}X{size.height}</h1>
+}
+//自定义hooks
+function useCount(defaultCount) {
+  const [count, setCount] = useState(defaultCount)
+  let it = useRef();
+  useEffect(() => {//创见一个定时器
+    it.current = setInterval(() => {
+      setCount(count => count + 1)
+    }, 1000)
+  }, [])
+  useEffect(() => {
+    if (count >= 10) {
+      clearInterval(it.current)
+    }
+  })
+  return [count, setCount]
+}
+function useSize() {
+  const [size, setSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+  const onResize = useCallback(() => setSize({ width: window.innerWidth, height: window.innerHeight }), [])
+  useEffect(() => {
+    window.addEventListener("resize", onResize, false)
+    return () => {
+      window.removeEventListener("resize", onResize, false)
+    }
+  }, [])
+  return size
+}
 export default App;
 

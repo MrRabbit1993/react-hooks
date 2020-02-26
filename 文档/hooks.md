@@ -219,3 +219,43 @@ class Count extends PureComponent{
 //   return <h1 onClick={props.onClick}>{props.count}</h1>  
 // })
 ```
+### 自定义
+可以返回类似自带的hooks  
+也可以返回一个jsx  
+更加可以返回值
+```js
+//自定义hooks
+function useCount(defaultCount) {
+  const [count, setCount] = useState(defaultCount)
+  let it = useRef();
+  useEffect(() => {//创见一个定时器
+    it.current = setInterval(() => {
+      setCount(count => count + 1)
+    }, 1000)
+  }, [])
+  useEffect(() => {
+    if (count >= 10) {
+      clearInterval(it.current)
+    }
+  })
+  return [count, setCount]
+}
+
+//jsx
+function useCounter(count) {
+  const size = useSize()
+  return <h1>{count},{size.width}X{size.height}</h1>
+}
+//返回一个值
+function useSize() {
+  const [size, setSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+  const onResize = useCallback(() => setSize({ width: window.innerWidth, height: window.innerHeight }), [])
+  useEffect(() => {
+    window.addEventListener("resize", onResize, false)
+    return () => {
+      window.removeEventListener("resize", onResize, false)
+    }
+  }, [])
+  return size
+}
+```
