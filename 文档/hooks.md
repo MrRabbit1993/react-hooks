@@ -169,3 +169,53 @@ const Count = memo(function Count(props){
   return <h1 onClick={props.onClick}>{props.count}</h1>  
 })
 ```
+### useRef
+1、获取子组件或者dom元素
+2、同步不同周期间的共享数据
+```js
+function App(){
+  const [count,setCount] = useState(0)
+  const double = useMemo(()=>{//这里可以控制是否重新计算了
+    return count * 2
+  },[count===3])
+  const countRef = useRef()//获取子组件
+  // let it
+  let it = useRef(); //就是上说的第二个方案
+  const onClick = useCallback(()=>{
+    countRef.current.speak()
+  },[countRef])
+  useEffect(()=>{//创见一个定时器
+    // it = setInterval(()=>{
+    //     setCount(count=>count+1)
+    // },1000)
+    it.current = setInterval(()=>{
+        setCount(count=>count+1)
+    },1000)
+  },[])
+  useEffect(()=>{
+    if(count>=10){
+      // clearInterval(it)
+      clearInterval(it.current)
+    }
+  })
+  return(
+    <div>
+      <button onClick={()=>setCount(count+1)}>count:{count},double:{double}</button>
+      <Count count={double} onClick={onClick} ref={countRef}/>
+    </div>
+  )
+}
+class Count extends PureComponent{
+  speak(){
+    console.log(`hello count is ${this.props.count}`)
+  }
+  render(){
+    const {props} = this;
+    return <h1 onClick={props.onClick}>{props.count}</h1>  
+  }
+}
+// const Count = memo(function Count(props){
+//   console.log("render count")
+//   return <h1 onClick={props.onClick}>{props.count}</h1>  
+// })
+```

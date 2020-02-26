@@ -1,33 +1,48 @@
-import React, { Component, useState,useMemo,memo,useCallback} from 'react';
+import React, { Component, useState,useMemo,useEffect,memo,useCallback, useRef, PureComponent} from 'react';
 function App(){
   const [count,setCount] = useState(0)
   const double = useMemo(()=>{//这里可以控制是否重新计算了
     return count * 2
   },[count===3])
-  // const onClick = ()=>{//这种会引发Count重新渲染，因为句柄变化了
-  //   console.log(123)
-  // }
-  //需要改写成
-  // const onClick = useMemo(()=>{
-  //   return ()=>{
-  //     console.log(123)
-  //   }
-  // },[])
-  //当useMemo返回的是一个函数，可以改写useCallback
-  //useMemo(()=>fn)等价于useCallBack(fn)
+  const countRef = useRef()
+  // let it
+  let it = useRef();
   const onClick = useCallback(()=>{
-    console.log(123)
+    countRef.current.speak()
+  },[countRef])
+  useEffect(()=>{//创见一个定时器
+    // it = setInterval(()=>{
+    //     setCount(count=>count+1)
+    // },1000)
+    it.current = setInterval(()=>{
+        setCount(count=>count+1)
+    },1000)
   },[])
+  useEffect(()=>{
+    if(count>=10){
+      // clearInterval(it)
+      clearInterval(it.current)
+    }
+  })
   return(
     <div>
       <button onClick={()=>setCount(count+1)}>count:{count},double:{double}</button>
-      <Count count={double} onClick={onClick}/>
+      <Count count={double} onClick={onClick} ref={countRef}/>
     </div>
   )
 }
-const Count = memo(function Count(props){
-  console.log("render count")
-  return <h1 onClick={props.onClick}>{props.count}</h1>  
-})
+class Count extends PureComponent{
+  speak(){
+    console.log(`hello count is ${this.props.count}`)
+  }
+  render(){
+    const {props} = this;
+    return <h1 onClick={props.onClick}>{props.count}</h1>  
+  }
+}
+// const Count = memo(function Count(props){
+//   console.log("render count")
+//   return <h1 onClick={props.onClick}>{props.count}</h1>  
+// })
 export default App;
 
