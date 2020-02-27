@@ -5,23 +5,21 @@ import { createSet, createAdd, createRemove, createToggle } from "./action"
 let idIns = Date.now();
 const TO_KEY = "_$KEY_";
 function bindActionCreators(actionCreators, dispatch) {//创建一个绑定dispath函数
-  // params :{ addTodo: createAdd }, dispatch
+  // {
+  // add:dispath(add(1))
+  // remove:dispath(remove(1))
+// }
   const res = {}
   for (let key in actionCreators) {
     res[key] = function (...args) {
-      const actionCreator = actionCreators[key];//得到每个函数--createAdd
-      const action = actionCreator(...args);//调用得到返回 --createAdd(payload) -->  得到了 { type: "set", payload }
-      dispatch(action)//触发派发  dispatch({ type: "set", payload })
+      const actionCreator = actionCreators[key];//得到每个函数
+      const action = actionCreator(...args);//调用得到返回
+      dispatch(action)//触发派发
     }
   }
-  //得到的值
   // {
-  // addTodo:addTodo = (payload)=>{
-    // dispatch({ type: "set", payload })
-  // }
-  // remove:remove=(payload)=>{
-    // dispatch({ type: "remove", payload })
-  // }
+  // add:add(1)
+  // remove:remove(1)
 // }
   return res
 }
