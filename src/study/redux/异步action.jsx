@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, memo, useCallback, useRef } from 'react';
 import "./App.css"
 import reducer from "./reducers.js"
-import { createSet, createAdd, createRemove, createToggle } from "./action"
+import { createSet, createAdd, createRemove, createToggle } from "./异步action"
 let idIns = Date.now();
 const TO_KEY = "_$KEY_";
 let store = {
