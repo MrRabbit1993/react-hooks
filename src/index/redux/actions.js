@@ -22,10 +22,10 @@ export function setIsLoadingCityData(isLoadingCityData) {
     };
 }
 //设置城市
-export function setCityData(cityDate) {
+export function setCityData(cityData) {
     return {
         type: ActionTypes.ACTION_SET_CITY_DATA,
-        payload: cityDate,
+        payload: cityData,
     };
 }
 //切换只看动车
@@ -91,9 +91,30 @@ export function exchangeFromTo() {
         dispatch(setTo(from));
     };
 }
+//设置时间
 export function setDepartDate(departDate) {
     return {
         type: ActionTypes.ACTION_SET_DEPART_DATE,
         payload: departDate,
     };
+}
+//异步请求数据
+export function fetchCityData() {
+    return (dispatch, getState) => {
+        const { isLoadingCityData } = getState();
+        if (isLoadingCityData) return
+        const cacheData = JSON.parse(localStorage.getItem("city_data_cache") || "{}");
+        if (Date.now() < cacheData.expires) {//验证过期
+            dispatch(setCityData(cacheData.data))
+            return
+        }
+        dispatch(setIsLoadingCityData(true));//将loading设置为true
+        fetch(`/rest/cities?_${Date.now()}`).then(response => response.json()).then(cityData => {
+            dispatch(setCityData(cityData))//更新城市数据
+            localStorage.setItem('city_data_cache',
+                JSON.stringify({ expires: Date.now() + 600 * 1000, data: cityData })//10分钟缓存
+            );
+            dispatch(setIsLoadingCityData(false))//取消loading加载
+        }).catch(err => { dispatch(setIsLoadingCityData(false)) })
+    }
 }

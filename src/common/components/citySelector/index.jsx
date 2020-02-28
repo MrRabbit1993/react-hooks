@@ -1,11 +1,18 @@
-import React, { useState,useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import "./indx.css";
 function CitySelector(props) {
-    const { show, cityData, isLoading, onBack } = props;
+    const { show, cityData, isLoading, onBack, fetchCityData } = props;
+
     const [searchKey, setSearchKey] = useState("");
-    const key = useMemo(()=>searchKey.trim(),[searchKey]);
+
+    const key = useMemo(() => searchKey.trim(), [searchKey]);
+
+    useEffect(() => {
+        if (!show || cityData || isLoading) return
+        fetchCityData();
+    }, [show, cityData, isLoading])
     return (
         <div className={classnames('city-selector', { hidden: !show })}>
             <div className="city-search">
@@ -26,7 +33,7 @@ function CitySelector(props) {
                     />
                 </div>
                 <i className={classnames('search-clean', {
-                    hidden: key.length===0
+                    hidden: key.length === 0
                 })}
                     onClick={() => setSearchKey("")}>
                     &#xf063;
@@ -39,6 +46,7 @@ CitySelector.propTypes = {
     show: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     onBack: PropTypes.func.isRequired,
-    cityData:PropTypes.object
+    fetchCityData: PropTypes.func.isRequired,
+    cityData: PropTypes.object
 }
 export default CitySelector;
