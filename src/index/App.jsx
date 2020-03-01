@@ -10,8 +10,9 @@ import HighSpeed from "./components/HighSpeed";
 import Submit from "./components/Submit";
 import CitySelector from "./../common/components/citySelector";
 import DateSelector from "./../common/components/dateSelector";
+import { h0 } from "./../common/units/fp";
 
-import { exchangeFromTo, showCitySelector, hideCitySelector, fetchCityData, setSelectedCity, showDateSelector, hideDateSelector } from "./redux/actions";
+import { exchangeFromTo, showCitySelector, hideCitySelector, fetchCityData, setSelectedCity, showDateSelector, hideDateSelector, setDepartDate } from "./redux/actions";
 
 function App(props) {
     const { from, to, dispatch, isCitySelectorVisible, cityData, isLoadingCityData, departDate, isDateSelectorVisible } = props;
@@ -39,9 +40,16 @@ function App(props) {
     const departDateCallBacks = useMemo(() => bindActionCreators({
         onClick: showDateSelector
     }, dispatch), []);
+    //日期选择
     const dateSelectorCallBacks = useMemo(() => bindActionCreators({
         onBack: hideDateSelector
-    },dispatch),[])
+    }, dispatch), [])
+    const onSelectDate = useCallback((day) => {
+        if(!day)return //无效的时间
+        if(day < h0)return //过去 时间
+        dispatch(setDepartDate(day));
+        dispatch(hideDateSelector(day));
+    }, [])
     return (
         <div>
             <div className="header-wrapper">
@@ -63,7 +71,7 @@ function App(props) {
                 isLoading={isLoadingCityData}
                 {...citySelectorCallBacks}
             />
-            <DateSelector show={isDateSelectorVisible} {...dateSelectorCallBacks} />
+            <DateSelector show={isDateSelectorVisible} {...dateSelectorCallBacks} onSelect={onSelectDate}/>
         </div>
     )
 }
