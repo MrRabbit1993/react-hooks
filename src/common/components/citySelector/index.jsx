@@ -1,9 +1,10 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, memo } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import "./indx.css";
-function CitySelector(props) {
-    const { show, cityData, isLoading, onBack, fetchCityData } = props;
+import CityList from "./../cityList";
+const CitySelector = memo(function CitySelector(props) {
+    const { show, cityData, isLoading, onBack, fetchCityData, onSelect } = props;
 
     const [searchKey, setSearchKey] = useState("");
 
@@ -13,6 +14,16 @@ function CitySelector(props) {
         if (!show || cityData || isLoading) return
         fetchCityData();
     }, [show, cityData, isLoading])
+    //生成一个函数
+    const outputCitySections = () => {
+        if (isLoading) {
+            return <div>loading</div>
+        }
+        if (cityData) {
+            return <CityList sections={cityData.cityList} onSelect={onSelect}></CityList>
+        }
+        return <div>error</div>
+    }
     return (
         <div className={classnames('city-selector', { hidden: !show })}>
             <div className="city-search">
@@ -39,14 +50,16 @@ function CitySelector(props) {
                     &#xf063;
                 </i>
             </div>
+            {outputCitySections()}
         </div>
     )
-}
+})
 CitySelector.propTypes = {
     show: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     onBack: PropTypes.func.isRequired,
     fetchCityData: PropTypes.func.isRequired,
-    cityData: PropTypes.object
+    cityData: PropTypes.object,
+    onSelect: PropTypes.func.isRequired
 }
 export default CitySelector;
