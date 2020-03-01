@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, memo } from "react";
+import React, { useState, useMemo, useEffect, memo,useCallback } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import "./indx.css";
@@ -14,13 +14,19 @@ const CitySelector = memo(function CitySelector(props) {
         if (!show || cityData || isLoading) return
         fetchCityData();
     }, [show, cityData, isLoading])
+
+    const toAlpha = useCallback(alpha => {//滚动
+        // document.querySelector(`[date-cate='${alpha}']`).scrollIntoView()
+        document.querySelector(`#${alpha}`).scrollIntoView()
+    },[])
+
     //生成一个函数
     const outputCitySections = () => {
         if (isLoading) {
             return <div>loading</div>
         }
         if (cityData) {
-            return <CityList sections={cityData.cityList} onSelect={onSelect}></CityList>
+            return <CityList sections={cityData.cityList} onSelect={onSelect} toAlpha={toAlpha}></CityList>
         }
         return <div>error</div>
     }
