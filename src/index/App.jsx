@@ -9,11 +9,12 @@ import Journey from "./components/Journey";
 import HighSpeed from "./components/HighSpeed";
 import Submit from "./components/Submit";
 import CitySelector from "./../common/components/citySelector";
+import DateSelector from "./../common/components/dateSelector";
 
-import { exchangeFromTo, showCitySelector,hideCitySelector,fetchCityData,setSelectedCity } from "./redux/actions";
+import { exchangeFromTo, showCitySelector, hideCitySelector, fetchCityData, setSelectedCity, showDateSelector, hideDateSelector } from "./redux/actions";
 
 function App(props) {
-    const { from, to, dispatch, isCitySelectorVisible, cityData, isLoadingCityData } = props;
+    const { from, to, dispatch, isCitySelectorVisible, cityData, isLoadingCityData, departDate, isDateSelectorVisible } = props;
     const onBack = useCallback(() => {
         window.history.back()
     }, [])
@@ -30,10 +31,16 @@ function App(props) {
         exchangeFromTo,
         showCitySelector
     }, dispatch), [])
-    const citySelectorCallBacks = useMemo(()=>bindActionCreators({
-        onBack:hideCitySelector,
+    const citySelectorCallBacks = useMemo(() => bindActionCreators({
+        onBack: hideCitySelector,
         fetchCityData,
-        onSelect:setSelectedCity
+        onSelect: setSelectedCity
+    }, dispatch), [])
+    const departDateCallBacks = useMemo(() => bindActionCreators({
+        onClick: showDateSelector
+    }, dispatch), []);
+    const dateSelectorCallBacks = useMemo(() => bindActionCreators({
+        onBack: hideDateSelector
     },dispatch),[])
     return (
         <div>
@@ -46,7 +53,7 @@ function App(props) {
                     // showCitySelector={doShowCitySelector}
                     {...callBacks}
                 />
-                <DepartDate />
+                <DepartDate time={departDate} {...departDateCallBacks} />
                 <HighSpeed />
                 <Submit />
             </form>
@@ -56,6 +63,7 @@ function App(props) {
                 isLoading={isLoadingCityData}
                 {...citySelectorCallBacks}
             />
+            <DateSelector show={isDateSelectorVisible} {...dateSelectorCallBacks} />
         </div>
     )
 }
