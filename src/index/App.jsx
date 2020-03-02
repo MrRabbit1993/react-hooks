@@ -12,10 +12,10 @@ import CitySelector from "./../common/components/citySelector";
 import DateSelector from "./../common/components/dateSelector";
 import { h0 } from "./../common/units/fp";
 
-import { exchangeFromTo, showCitySelector, hideCitySelector, fetchCityData, setSelectedCity, showDateSelector, hideDateSelector, setDepartDate } from "./redux/actions";
+import { exchangeFromTo, showCitySelector, hideCitySelector, fetchCityData, setSelectedCity, showDateSelector, hideDateSelector, setDepartDate,toggleHighSpeed } from "./redux/actions";
 
 function App(props) {
-    const { from, to, dispatch, isCitySelectorVisible, cityData, isLoadingCityData, departDate, isDateSelectorVisible } = props;
+    const { from, to, dispatch, isCitySelectorVisible, cityData, isLoadingCityData, departDate, isDateSelectorVisible,highSpeed } = props;
     const onBack = useCallback(() => {
         window.history.back()
     }, [])
@@ -49,7 +49,10 @@ function App(props) {
         if(day < h0)return //过去 时间
         dispatch(setDepartDate(day));
         dispatch(hideDateSelector(day));
-    }, [])
+    }, []);
+    const highSpeedCallBacks = useMemo(()=>bindActionCreators({
+        toggle:toggleHighSpeed
+    },dispatch),[]);
     return (
         <div>
             <div className="header-wrapper">
@@ -62,7 +65,7 @@ function App(props) {
                     {...callBacks}
                 />
                 <DepartDate time={departDate} {...departDateCallBacks} />
-                <HighSpeed />
+                <HighSpeed highSpeed={highSpeed} {...highSpeedCallBacks}/>
                 <Submit />
             </form>
             <CitySelector
