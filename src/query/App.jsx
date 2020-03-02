@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import URI from "urijs";
 import dayjs from "dayjs";
 import "./App.css";
@@ -13,13 +14,18 @@ import {
     setDepartStations,
     setArriveStations,
     prevDate,
-    nextDate
+    nextDate,
+    toggleOrderType,
+    toggleHighSpeed,
+    toggleOnlyTickets,
+    toggleIsFiltersVisible
 } from "./redux/actions";
 import Header from "./../common/components/Header";
 import Nav from "./../common/components/nav";
 import List from "./components/list";
 import Buttom from "./components/bottom"
 import DepartDate from "../index/components/DepartDate";
+
 function App(props) {
     const { from, to, dispatch, searchParsed, departDate,
         highSpeed,
@@ -33,7 +39,8 @@ function App(props) {
         departTimeEnd,
         arriveTimeStart,
         arriveTimeEnd,
-        trainList
+        trainList,
+        isFiltersVisible
     } = props;
     const onBack = useCallback(() => {
         window.history.back();
@@ -99,7 +106,12 @@ function App(props) {
         arriveTimeEnd])
 
     const { isPrevDisabled, isNextDisabled, prev, next } = useNav(departDate, dispatch, prevDate, nextDate)
-
+    const bottomCallBacks = useMemo(() => bindActionCreators({
+        toggleOrderType,
+        toggleHighSpeed,
+        toggleOnlyTickets,
+        toggleIsFiltersVisible
+    }, dispatch), [])
     if (!searchParsed) {
         return null;
     }
@@ -111,8 +123,14 @@ function App(props) {
             <Nav date={departDate} isPrevDisabled={isPrevDisabled} isNextDisabled={isNextDisabled} prev={prev}
                 next={next}
             />
-            <List list={trainList}/>
-            <Buttom />
+            <List list={trainList} />
+            <Buttom
+                isFiltersVisible={isFiltersVisible}
+                highSpeed={highSpeed}
+                orderType={orderType}
+                onlyTickets={onlyTickets}
+                {...bottomCallBacks}
+            />
         </div>
     )
 
