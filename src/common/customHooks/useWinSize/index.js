@@ -10,8 +10,8 @@ export default function useWinSize() {
         }
     }, [])
     const OnResize = () => {
-        setWidth(ocument.documentElement.clientWidth)
-        setHighe(ocument.documentElement.clientWidth)
+        setWidth(document.documentElement.clientWidth)
+        setHighe(document.documentElement.clientWidth)
     }
     return { width, height }
 }
