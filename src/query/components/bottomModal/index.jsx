@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
-import Option from "./../option"
-
+import Option from "./../option";
+import Slider from "./../Slider";
 const ButtomModal = memo(function ButtomModal(props) {
     const {
         checkedTicketTypes,
@@ -39,34 +39,38 @@ const ButtomModal = memo(function ButtomModal(props) {
     const [localCheckedArriveStations, setLocalCheckedArriveStations] = useState(() => {//本地到达车站
         return { ...checkedArriveStations }
     });
+    const [localDepartTimeStart, setLocalDepartTimeStart] = useState(departTimeStart)//开始起点时间缓存区
+    const [localDepartTimeEnd, setLocalDepartTimeEnd] = useState(departTimeEnd)//开始结束时间缓存区
+    const [localArriveTimeStart, setLocalArriveTimeStart] = useState(arriveTimeStart)//终点起点时间缓存区
+    const [localArriveTimeEnd, setLocalArriveTimeEnd] = useState(arriveTimeEnd)//终点结束时间缓存区
     const optionGroup = [
         {
             title: "坐席类型",
             options: ticketTypes,
             // checkedMap: checkedTicketTypes
             checkedMap: localCheckedTicketTypes,//使用缓存区的数据，而不是用redux
-            update:setLocalCheckedTicketTypes
+            update: setLocalCheckedTicketTypes
         },
         {
             title: "车次类型",
             options: trainTypes,
             // checkedMap: checkedTrainTypes
             checkedMap: localCheckedTrainTypes,//使用缓存区的数据，而不是用redux
-            update:setLocalCheckedTrainTypes
+            update: setLocalCheckedTrainTypes
         },
         {
             title: "出发车站",
             options: departStations,
             // checkedMap: checkedDepartStations
             checkedMap: localCheckedDepartStations,//使用缓存区的数据，而不是用redux
-            update:setLocalCheckedDepartStations
+            update: setLocalCheckedDepartStations
         },
         {
             title: "到达车站",
             options: arriveStations,
             // checkedMap: checkedArriveStations
             checkedMap: localCheckedArriveStations,//使用缓存区的数据，而不是用redux
-            update:setLocalCheckedArriveStations
+            update: setLocalCheckedArriveStations
         },
     ]
     return (
@@ -79,6 +83,18 @@ const ButtomModal = memo(function ButtomModal(props) {
                     </div>
                     <div className="options">
                         {optionGroup.map(group => <Option key={group.title} {...group} />)}
+                        <Slider title="出发时间" 
+                            currentStartHours={localDepartTimeStart}
+                            currentEndHours={localDepartTimeEnd}
+                            onStartChange={setLocalDepartTimeStart}
+                            onEndChange={setLocalDepartTimeEnd}
+                        />
+                        <Slider title="到达时间" 
+                            currentStartHours={localArriveTimeStart}
+                            currentEndHours={localArriveTimeEnd}
+                            onStartChange={setLocalArriveTimeStart}
+                            onEndChange={setLocalArriveTimeEnd}
+                        />
                     </div>
                 </div>
             </div>
