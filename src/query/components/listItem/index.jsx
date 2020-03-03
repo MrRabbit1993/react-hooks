@@ -4,8 +4,8 @@ import URI from "urijs"
 
 const ListItem = memo(function ListItem(props) {
     const { dTime, aTime, dStation, aStation, trainNumber, date, time, priceMsg, dayAfter } = props;
-    const url = useMemo(() => new URI('ticket.html').setSearch('aStation', aStation).setSearch('dStation', dStation).
-        setSearch('trainNumber', trainNumber).setSearch('date', date).toString(), [aStation, dStation, trainNumber, date]);
+    const url = useMemo(() => new URI('ticket.html').setSearch('aStation', aStation).setSearch('dStation', dStation)
+    .setSearch('trainNumber', trainNumber).setSearch('date', date).toString(), [aStation, dStation, trainNumber, date]);
 
     return (
         <li className="list-item">
