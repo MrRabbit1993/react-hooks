@@ -1,5 +1,6 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useMemo } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import URI from "urijs";
 import dayjs from "dayjs";
 import "./App.css";
@@ -10,8 +11,11 @@ import Schedule from "./components/schedule";
 import Header from "./../common/components/Header";
 import Nav from "./../common/components/nav";
 import useNav from "./../common/customHooks/useNav";
-import { setDepartStation, setArriveStation, setTrainNumber, setDepartDate, setSearchParsed, prevDate, nextDate,
-setDepartTimeStr,setArriveTimeStr,setArriveDate,setDurationStr,setTickets } from "./redux/actions";
+import {
+    setDepartStation, setArriveStation, setTrainNumber, setDepartDate, setSearchParsed, prevDate, nextDate,
+    setDepartTimeStr, setArriveTimeStr, setArriveDate, setDurationStr, setTickets, toggleIsScheduleVisible
+} from "./redux/actions";
+
 function App(props) {
     const {
         departDate,//出发日期
@@ -45,7 +49,7 @@ function App(props) {
             .setQuery('trainNumber', trainNumber);
         fetch(url).then(response => response.json()).then(result => {
             const { detail, candidates } = result;
-            const {departTimeStr,arriveTimeStr,arriveDate,durationStr} = detail;
+            const { departTimeStr, arriveTimeStr, arriveDate, durationStr } = detail;
             dispatch(setDepartTimeStr(departTimeStr));//更新redux
             dispatch(setArriveTimeStr(arriveTimeStr));//更新redux
             dispatch(setArriveDate(arriveDate));//更新redux
@@ -62,6 +66,9 @@ function App(props) {
         prev,
         next
     } = useNav(departDate, dispatch, prevDate, nextDate);
+    const detailCallBacks = useMemo(() => bindActionCreators({
+        toggleIsScheduleVisible
+    }, dispatch), [toggleIsScheduleVisible])
     if (!searchParsed) return null
     return (
         <div className="app">
@@ -75,6 +82,19 @@ function App(props) {
                     prev={prev}
                     next={next}
                 />
+                <div className="detail-wrapper">
+                    <Detail
+                        departDate={departDate}
+                        arriveDate={arriveDate}
+                        departTimeStr={departTimeStr}
+                        arriveTimeStr={arriveTimeStr}
+                        departStation={departStation}
+                        arriveStation={arriveStation}
+                        durationStr={durationStr}
+                        trainNumber={trainNumber}
+                        {...detailCallBacks}
+                    />
+                </div>
             </div>
         </div>
     )
