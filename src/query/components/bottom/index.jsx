@@ -1,4 +1,4 @@
-import React, { useState,useMemo } from 'react';
+import React, { useState,useMemo,useReducer } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import './index.css';

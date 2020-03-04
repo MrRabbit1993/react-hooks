@@ -259,3 +259,38 @@ function useSize() {
   return size
 }
 ```
+### useReducer
+对useState的封装  
+一种局部的redux  
+一般用于复杂逻辑
+```js
+function checkedReducer(state, action) {
+    const { type, payload } = action;
+    let newState
+    switch (type) {
+        case 'toggle':
+            newState = { ...state }
+            if (payload in newState) {
+                delete newState[payload]
+            } else {
+                newState[payload] = true
+            }
+            return newState
+        case 'reset':
+            return {};
+        default:
+    }
+    return state
+}
+ // const [localCheckedTicketTypes, setLocalCheckedTicketTypes] = useState(() => {//本地坐席
+    //     return { ...checkedTicketTypes }
+    // });
+    //改写useReducer
+    const [localCheckedTicketTypes, localCheckedTicketTypesDispatch] = useReducer(checkedReducer, checkedTicketTypes, (checkedTicketTypes) => {//本地坐席
+        return { ...checkedTicketTypes }
+    });
+    //useReducer相当于是一种局部的redux
+    //第一个参数是局部的reducer，第二个是原始值，第三个可以有或者无，当有的时候参数是第二个的的值
+    //useReducer内部就是封装的useState
+    //useReducer可以完成的，都可以用useState改写
+```
