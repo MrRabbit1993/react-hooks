@@ -12,8 +12,18 @@ const Slider = memo(function Slider(props) {
     const lastEndX = useRef();//记录第二个元素的坐标
     const range = useRef();//滑块
     const rangeWidth = useRef();
+    const prevCurrentStartHours = useRef(currentStartHours);//记录上一次的值
+    const preCurrentEndHours = useRef(currentEndHours);//记录上一次的值
     const [start, setStart] = useState(() => (currentStartHours / 24) * 100);
     const [end, setEnd] = useState(() => (currentEndHours / 24) * 100);
+    if (prevCurrentStartHours.current !== currentStartHours) {//上次的值与现在不等
+        setStart((currentStartHours / 24) * 100);//更新start
+        prevCurrentStartHours.current = currentStartHours
+    }
+    if (preCurrentEndHours.current !== currentEndHours) {//上次的值与现在不等
+        setEnd((currentEndHours / 24) * 100);//更新start
+        preCurrentEndHours.current = currentEndHours
+    }
 
     const startPercent = useMemo(() => {//防止出现101 或者-1
         if (start > 100) return 100
