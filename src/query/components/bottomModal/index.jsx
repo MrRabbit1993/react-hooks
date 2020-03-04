@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState,useMemo } from 'react';
 import classnames from "classnames";
 import PropTypes from 'prop-types';
 import Option from "./../option";
@@ -85,15 +85,19 @@ const ButtomModal = memo(function ButtomModal(props) {
         setArriveTimeEnd(localDepartTimeEnd);//提交终点站结束时间
         toggleIsFiltersVisible();//关闭浮层
     }
-    const isResetDisabled = Object.keys(localCheckedTicketTypes).length === 0
+    const isResetDisabled = useMemo(() => Object.keys(localCheckedTicketTypes).length === 0
         && Object.keys(localCheckedTrainTypes).length === 0
         && Object.keys(localCheckedArriveStations).length === 0
         && Object.keys(localCheckedDepartStations).length === 0
         && localDepartTimeStart === 0
         && localDepartTimeEnd === 24
         && localArriveTimeStart === 0
-        && localArriveTimeEnd === 24;
+        && localArriveTimeEnd === 24, [localCheckedTicketTypes,localCheckedTrainTypes,
+            localCheckedArriveStations,localCheckedDepartStations,localDepartTimeStart,
+            localDepartTimeEnd,localArriveTimeStart,localArriveTimeEnd
+        ])
     const reset = () => {
+        if (isResetDisabled) return
         setLocalCheckedTicketTypes({});//修改缓存区的坐席
         setLocalCheckedTrainTypes({});//修改缓存区车型
         setLocalCheckedDepartStations({});//修改缓存区起始站

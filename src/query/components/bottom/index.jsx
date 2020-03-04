@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import './index.css';
@@ -35,6 +35,17 @@ function Buttom(props) {
         setArriveTimeStart,
         setArriveTimeEnd,
     } = props;
+    const noChecked = useMemo(() => Object.keys(checkedTicketTypes).length === 0
+        && Object.keys(checkedTrainTypes).length === 0
+        && Object.keys(checkedArriveStations).length === 0
+        && Object.keys(checkedDepartStations).length === 0
+        && departTimeStart === 0
+        && departTimeEnd === 24
+        && arriveTimeStart === 0
+        && arriveTimeEnd === 24, [checkedTicketTypes, checkedTrainTypes,
+        checkedArriveStations, checkedDepartStations, departTimeStart,
+        departTimeEnd, arriveTimeStart, arriveTimeEnd
+    ]);
     return (
         <div className="bottom">
             <div className="bottom-filters">
@@ -62,11 +73,11 @@ function Buttom(props) {
                 </span>
                 <span
                     className={classnames('item', {
-                        'item-on': isFiltersVisible,
+                        'item-on': isFiltersVisible||!noChecked,
                     })}
                     onClick={toggleIsFiltersVisible}
                 >
-                    <i className="icon">{'\uf0f7'}</i>
+                    <i className="icon">{noChecked?'\uf0f7':"\uf446"}</i>
                     综合筛选
                 </span>
             </div>
