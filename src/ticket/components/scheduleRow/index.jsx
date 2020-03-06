@@ -17,7 +17,6 @@ const ScheduleRow = memo(function ScheduleRow(props) {
         beforeDepartStation,
         afterArriveStation
     } = props;
-    console.log(isArriveStation,isDepartStation)
     return (
         <li className="">
             <div className={classnames('icon', {
