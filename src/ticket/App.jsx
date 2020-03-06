@@ -11,6 +11,7 @@ import Candidate from "./components/candidate";
 import Header from "./../common/components/Header";
 import Nav from "./../common/components/nav";
 import useNav from "./../common/customHooks/useNav";
+import { TrainContext } from "./context";
 import {
     setDepartStation, setArriveStation, setTrainNumber, setDepartDate, setSearchParsed, prevDate, nextDate,
     setDepartTimeStr, setArriveTimeStr, setArriveDate, setDurationStr, setTickets, toggleIsScheduleVisible
@@ -96,6 +97,9 @@ function App(props) {
                         {...detailCallBacks}
                     />
                 </div>
+                <TrainContext.Provider value={{ trainNumber, departStation, arriveStation, departDate }}>
+                    <Candidate tickets={tickets} />
+                </TrainContext.Provider>
                 {
                     isScheduleVisible &&
                     <div className="mask" onClick={() => dispatch(toggleIsScheduleVisible())}>
