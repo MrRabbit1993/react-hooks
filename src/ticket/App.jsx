@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useMemo } from "react";
+import React, { useEffect, useCallback, useMemo, lazy, Suspense } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import URI from "urijs";
@@ -7,7 +7,7 @@ import "./App.css";
 import { h0 } from "./../common/units/fp";
 import Detail from "./../common/components/detail";
 import Candidate from "./components/candidate";
-import Schedule from "./components/schedule";
+// import Schedule from "./components/schedule";
 import Header from "./../common/components/Header";
 import Nav from "./../common/components/nav";
 import useNav from "./../common/customHooks/useNav";
@@ -16,6 +16,7 @@ import {
     setDepartTimeStr, setArriveTimeStr, setArriveDate, setDurationStr, setTickets, toggleIsScheduleVisible
 } from "./redux/actions";
 
+const Schedule = lazy(() => import("./components/schedule"));
 function App(props) {
     const {
         departDate,//出发日期
@@ -95,6 +96,22 @@ function App(props) {
                         {...detailCallBacks}
                     />
                 </div>
+                {
+                    isScheduleVisible &&
+                    <div className="mask" onClick={() => dispatch(toggleIsScheduleVisible())}>
+                        <Suspense fallback={
+                            <div>loading</div>
+                        }>
+                            <Schedule
+                                date={departDate}
+                                trainNumber={trainNumber}
+                                departStation={departStation}
+                                arriveStation={arriveStation}
+                            />
+                        </Suspense>
+                    </div>
+                }
+
             </div>
         </div>
     )
