@@ -1,8 +1,8 @@
-import { createStore, combineReducers, applyMiddleware, compose } from "redux";
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 
-import thunk from "redux-thunk";
+import thunk from 'redux-thunk';
 
-import reducers from "./reducers";
+import reducers from './reducers';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const defaultStore = {
@@ -19,11 +19,11 @@ const defaultStore = {
     passengers: [],
     menu: null,
     isMenuVisible: false,
-    searchParsed: false
-}
+    searchParsed: false,
+};
 
 export default createStore(
-    combineReducers(reducers),//聚合规则
+    combineReducers(reducers), //聚合规则
     defaultStore,
-    composeEnhancers(applyMiddleware(thunk))//使用中间件达到异步
-)
+    composeEnhancers(applyMiddleware(thunk)) //使用中间件达到异步
+);

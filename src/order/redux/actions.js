@@ -1,4 +1,4 @@
-import * as ActionTypes from "./constants";
+import * as ActionTypes from './constants';
 export function setTrainNumber(trainNumber) {
     return {
         type: ActionTypes.ACTION_SET_TRAIN_NUMBER,
@@ -86,7 +86,8 @@ export function setSearchParsed(searchParsed) {
 
 export function fetchInitial(url) {
     return (dispatch, getState) => {
-        fetch(url).then(res => res.json())
+        fetch(url)
+            .then(res => res.json())
             .then(data => {
                 const {
                     departTimeStr,
@@ -140,7 +141,7 @@ export function createChild() {
     return (dispatch, getState) => {
         const { passengers } = getState();
 
-        let adultFound = null;//关联成人id
+        let adultFound = null; //关联成人id
 
         for (let passenger of passengers) {
             const keys = Object.keys(passenger);
@@ -182,7 +183,7 @@ export function removePassenger(id) {
         const { passengers } = getState();
 
         const newPassengers = passengers.filter(passenger => {
-            return passenger.id !== id && passenger.followAdult !== id;//移除了成人，那么儿童也会被移除
+            return passenger.id !== id && passenger.followAdult !== id; //移除了成人，那么儿童也会被移除
         });
 
         dispatch(setPassengers(newPassengers));
@@ -244,7 +245,7 @@ export function showGenderMenu(id) {
                         value: 'female',
                         active: 'female' === passenger.gender,
                     },
-                ]
+                ],
             })
         );
     };
@@ -306,7 +307,11 @@ export function showTicketTypeMenu(id) {
                         );
                     } else {
                         // const adult = passengers.find(passenger =>passenger.id === id &&passenger.ticketType === 'adult' );
-                        const adult = passengers.find(passenger =>passenger.id !== id &&passenger.ticketType === 'adult' );
+                        const adult = passengers.find(
+                            passenger =>
+                                passenger.id !== id &&
+                                passenger.ticketType === 'adult'
+                        );
 
                         if (adult) {
                             dispatch(

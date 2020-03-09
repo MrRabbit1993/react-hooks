@@ -1,4 +1,4 @@
-import * as ActionTypes from "./constants";
+import * as ActionTypes from './constants';
 
 //设置起始站
 export function setFrom(from) {
@@ -64,7 +64,9 @@ export function setSelectedCity(city) {
     return (dispatch, getState) => {
         const { currentSelectingLeftCity } = getState();
         //选择左边就把数据补充到左侧，反之右侧
-        currentSelectingLeftCity ? dispatch(setFrom(city)) : dispatch(setTo(city));
+        currentSelectingLeftCity
+            ? dispatch(setFrom(city))
+            : dispatch(setTo(city));
         //在关闭城市选择浮层
         dispatch(hideCitySelector());
     };
@@ -102,19 +104,31 @@ export function setDepartDate(departDate) {
 export function fetchCityData() {
     return (dispatch, getState) => {
         const { isLoadingCityData } = getState();
-        if (isLoadingCityData) return
-        const cacheData = JSON.parse(localStorage.getItem("city_data_cache") || "{}");
-        if (Date.now() < cacheData.expires) {//验证过期
-            dispatch(setCityData(cacheData.data))
-            return
+        if (isLoadingCityData) return;
+        const cacheData = JSON.parse(
+            localStorage.getItem('city_data_cache') || '{}'
+        );
+        if (Date.now() < cacheData.expires) {
+            //验证过期
+            dispatch(setCityData(cacheData.data));
+            return;
         }
-        dispatch(setIsLoadingCityData(true));//将loading设置为true
-        fetch(`/rest/cities?_${Date.now()}`).then(response => response.json()).then(cityData => {
-            dispatch(setCityData(cityData))//更新城市数据
-            localStorage.setItem('city_data_cache',
-                JSON.stringify({ expires: Date.now() + 600 * 1000, data: cityData })//10分钟缓存
-            );
-            dispatch(setIsLoadingCityData(false))//取消loading加载
-        }).catch(err => { dispatch(setIsLoadingCityData(false)) })
-    }
+        dispatch(setIsLoadingCityData(true)); //将loading设置为true
+        fetch(`/rest/cities?_${Date.now()}`)
+            .then(response => response.json())
+            .then(cityData => {
+                dispatch(setCityData(cityData)); //更新城市数据
+                localStorage.setItem(
+                    'city_data_cache',
+                    JSON.stringify({
+                        expires: Date.now() + 600 * 1000,
+                        data: cityData,
+                    }) //10分钟缓存
+                );
+                dispatch(setIsLoadingCityData(false)); //取消loading加载
+            })
+            .catch(err => {
+                dispatch(setIsLoadingCityData(false));
+            });
+    };
 }

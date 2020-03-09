@@ -36,7 +36,6 @@ import Header from './../common/components/Header';
 import Nav from './../common/components/nav';
 import List from './components/list';
 import Buttom from './components/bottom';
-import DepartDate from '../index/components/DepartDate';
 
 function App(props) {
     const {

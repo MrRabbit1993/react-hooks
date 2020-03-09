@@ -1,11 +1,29 @@
-import React, { memo,useMemo } from "react";
-import PropTypes from "prop-types";
-import URI from "urijs"
+import React, { memo, useMemo } from 'react';
+import PropTypes from 'prop-types';
+import URI from 'urijs';
 
 const ListItem = memo(function ListItem(props) {
-    const { dTime, aTime, dStation, aStation, trainNumber, date, time, priceMsg, dayAfter } = props;
-    const url = useMemo(() => new URI('ticket.html').setSearch('aStation', aStation).setSearch('dStation', dStation)
-    .setSearch('trainNumber', trainNumber).setSearch('date', date).toString(), [aStation, dStation, trainNumber, date]);
+    const {
+        dTime,
+        aTime,
+        dStation,
+        aStation,
+        trainNumber,
+        date,
+        time,
+        priceMsg,
+        dayAfter,
+    } = props;
+    const url = useMemo(
+        () =>
+            new URI('ticket.html')
+                .setSearch('aStation', aStation)
+                .setSearch('dStation', dStation)
+                .setSearch('trainNumber', trainNumber)
+                .setSearch('date', date)
+                .toString(),
+        [aStation, dStation, trainNumber, date]
+    );
 
     return (
         <li className="list-item">
@@ -13,7 +31,10 @@ const ListItem = memo(function ListItem(props) {
                 <span className="item-time">
                     <em>{dTime}</em>
                     <br />
-                    <em className="em-light">{aTime}<i className="time-after">{dayAfter}</i></em>
+                    <em className="em-light">
+                        {aTime}
+                        <i className="time-after">{dayAfter}</i>
+                    </em>
                 </span>
                 <span className="item-stations">
                     <em>
@@ -37,9 +58,9 @@ const ListItem = memo(function ListItem(props) {
                     <em className="em-light-orange">可抢票</em>
                 </span>
             </a>
-        </li >
-    )
-})
+        </li>
+    );
+});
 ListItem.propTypes = {
     dTime: PropTypes.string.isRequired,
     aTime: PropTypes.string.isRequired,
@@ -49,6 +70,6 @@ ListItem.propTypes = {
     date: PropTypes.string.isRequired,
     time: PropTypes.string.isRequired,
     priceMsg: PropTypes.string.isRequired,
-    dayAfter: PropTypes.string.isRequired
-}
+    dayAfter: PropTypes.string.isRequired,
+};
 export default ListItem;

@@ -1,4 +1,4 @@
-import * as ActionTypes from "./constants";
+import * as ActionTypes from './constants';
 
 export default {
     departDate(state = Date.now(), action) {

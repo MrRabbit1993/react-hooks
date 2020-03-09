@@ -1,7 +1,7 @@
-import React from "react";
-import classnames from "classnames";
-import PropTypes from "prop-types";
-import "./index.css";
+import React from 'react';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import './index.css';
 
 function HighSpeed(props) {
     const { highSpeed, toggle } = props;
@@ -10,18 +10,23 @@ function HighSpeed(props) {
             <div className="high-speed-label">只看高铁/动车</div>
             <div className="high-speed-switch" onClick={() => toggle()}>
                 <input type="hidden" name="highSpeed" value={highSpeed} />
-                <div className={classnames('high-speed-track', {
-                    checked: highSpeed
-                })}>
-                    <span className={classnames('high-speed-handle',{
-                        checked:highSpeed
-                    })}></span>
+                <div
+                    className={classnames('high-speed-track', {
+                        checked: highSpeed,
+                    })}
+                >
+                    <span
+                        className={classnames('high-speed-handle', {
+                            checked: highSpeed,
+                        })}
+                    ></span>
                 </div>
             </div>
-        </div>)
+        </div>
+    );
 }
 HighSpeed.propTypes = {
     highSpeed: PropTypes.bool.isRequired,
-    toggle: PropTypes.func.isRequired
-}
+    toggle: PropTypes.func.isRequired,
+};
 export default HighSpeed;

@@ -1,23 +1,35 @@
-import React, { useEffect, useCallback, useMemo } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import URI from "urijs";
-import dayjs from "dayjs";
-import "./App.css";
+import React, { useEffect, useCallback, useMemo } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import URI from 'urijs';
+import dayjs from 'dayjs';
+import './App.css';
 
-import Header from "./../common/components/Header";
-import Detail from "./../common/components/detail";
-import Account from "./components/account";
-import Choose from "./components/choose";
-import Passengers from "./components/passengers";
-import Ticket from "./components/ticket";
-import Menu from "./components/menu";
+import Header from './../common/components/Header';
+import Detail from './../common/components/detail';
+import Account from './components/account';
+import Choose from './components/choose';
+import Passengers from './components/passengers';
+import Ticket from './components/ticket';
+import Menu from './components/menu';
 import {
-    setDepartStation, setArriveStation, setTrainNumber, setSeatType,
-    setDepartDate, setSearchParsed, fetchInitial, createAdult, createChild,
-    removePassenger, updatePassenger, hideMenu, showGenderMenu, showFollowAdultMenu, showTicketTypeMenu
-} from "./redux/actions";
-import DepartDate from "../index/components/DepartDate";
+    setDepartStation,
+    setArriveStation,
+    setTrainNumber,
+    setSeatType,
+    setDepartDate,
+    setSearchParsed,
+    fetchInitial,
+    createAdult,
+    createChild,
+    removePassenger,
+    updatePassenger,
+    hideMenu,
+    showGenderMenu,
+    showFollowAdultMenu,
+    showTicketTypeMenu,
+} from './redux/actions';
+import DepartDate from '../index/components/DepartDate';
 
 function App(props) {
     const {
@@ -35,11 +47,11 @@ function App(props) {
         menu,
         isMenuVisible,
         searchParsed,
-        dispatch
+        dispatch,
     } = props;
     const onBack = useCallback(() => {
-        window.history.back()
-    }, [])
+        window.history.back();
+    }, []);
     //解析地址栏
     useEffect(() => {
         const queries = URI.parseQuery(window.location.search);
@@ -49,35 +61,64 @@ function App(props) {
         dispatch(setTrainNumber(trainNumber));
         dispatch(setSeatType(type));
         dispatch(setDepartDate(dayjs(date).valueOf()));
-        dispatch(setSearchParsed(true))
+        dispatch(setSearchParsed(true));
     }, []);
     //发请求
     useEffect(() => {
         if (!searchParsed) {
-            return
+            return;
         }
-        const url = new URI('/rest/order').setSearch('dStation', departStation).setSearch('aStation', arriveStation)
-            .setSearch('type', seatType).setSearch('date', dayjs(DepartDate).format("YYYY-MM-DD").toString());
+        const url = new URI('/rest/order')
+            .setSearch('dStation', departStation)
+            .setSearch('aStation', arriveStation)
+            .setSearch('type', seatType)
+            .setSearch(
+                'date',
+                dayjs(DepartDate)
+                    .format('YYYY-MM-DD')
+                    .toString()
+            );
         dispatch(fetchInitial(url));
-    }, [searchParsed, departStation, arriveStation, seatType, DepartDate])
+    }, [searchParsed, departStation, arriveStation, seatType, DepartDate]);
 
-    const passengersCallBacks = useMemo(() => bindActionCreators({
-        createAdult,
-        createChild,
-        removePassenger,
-        updatePassenger,
-        showGenderMenu,
-        showFollowAdultMenu,
-        showTicketTypeMenu
-    }, dispatch), [])
+    const passengersCallBacks = useMemo(
+        () =>
+            bindActionCreators(
+                {
+                    createAdult,
+                    createChild,
+                    removePassenger,
+                    updatePassenger,
+                    showGenderMenu,
+                    showFollowAdultMenu,
+                    showTicketTypeMenu,
+                },
+                dispatch
+            ),
+        []
+    );
 
-    const menuCallBacks = useMemo(() => bindActionCreators({
-        hideMenu
-    }, dispatch), [])
+    const menuCallBacks = useMemo(
+        () =>
+            bindActionCreators(
+                {
+                    hideMenu,
+                },
+                dispatch
+            ),
+        []
+    );
 
-    const chooseCallBack = useMemo(() => bindActionCreators({
-        updatePassenger
-    }, dispatch), [])
+    const chooseCallBack = useMemo(
+        () =>
+            bindActionCreators(
+                {
+                    updatePassenger,
+                },
+                dispatch
+            ),
+        []
+    );
 
     if (!searchParsed) return null;
     return (
@@ -96,19 +137,21 @@ function App(props) {
                     durationStr={durationStr}
                     trainNumber={trainNumber}
                 >
-                    <span className="train-icon" style={{ display: 'block' }}></span>
+                    <span
+                        className="train-icon"
+                        style={{ display: 'block' }}
+                    ></span>
                 </Detail>
             </div>
             <Ticket price={price} type={seatType} />
             <Passengers {...passengersCallBacks} passengers={passengers} />
-            {passengers.length > 0 && <Choose
-                passengers={passengers}
-                {...chooseCallBack}
-            />}
+            {passengers.length > 0 && (
+                <Choose passengers={passengers} {...chooseCallBack} />
+            )}
             <Account length={passengers.length} price={price} />
             <Menu show={isMenuVisible} {...menu} {...menuCallBacks} />
         </div>
-    )
+    );
 }
 function mapStateToProps(state) {
     return state;
@@ -116,4 +159,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return { dispatch };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App);

@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import "./index.css";
+import './index.css';
 
 function Header(props) {
     const { onBack, title } = props;
@@ -19,13 +19,12 @@ function Header(props) {
             </div>
             <h1 className="header-title">{title}</h1>
         </div>
-    )
+    );
 }
-
 
 Header.propTypes = {
     onBack: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired
-}
+    title: PropTypes.string.isRequired,
+};
 
 export default Header;

@@ -1,4 +1,4 @@
-import * as ActionTypes from "./constants";
+import * as ActionTypes from './constants';
 //需要改写成单例
 export default {
     from(state = '北京', action) {

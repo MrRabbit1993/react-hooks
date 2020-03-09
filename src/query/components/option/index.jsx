@@ -1,6 +1,6 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import Filter from "./../filter"
+import Filter from './../filter';
 const Option = memo(function Option(props) {
     // const { title, options, checkedMap, update } = props;
     const { title, options, checkedMap, dispatch } = props;
@@ -23,7 +23,14 @@ const Option = memo(function Option(props) {
             <ul>
                 {options.map(option => {
                     // return <Filter key={option.value} {...option} checked={option.value in checkedMap} toggle={toggle} />
-                    return <Filter key={option.value} {...option} checked={option.value in checkedMap} dispatch={dispatch} />
+                    return (
+                        <Filter
+                            key={option.value}
+                            {...option}
+                            checked={option.value in checkedMap}
+                            dispatch={dispatch}
+                        />
+                    );
                 })}
             </ul>
         </div>
@@ -34,6 +41,6 @@ Option.protoTypes = {
     options: PropTypes.array.isRequired,
     checkMap: PropTypes.object.isRequired,
     // update: PropTypes.func.isRequired
-    dispatch: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired,
 };
 export default Option;

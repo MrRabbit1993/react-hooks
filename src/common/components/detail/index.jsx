@@ -1,11 +1,11 @@
-import React, { memo, useMemo } from "react";
-import PropTypes from "prop-types";
-import dayjs from "dayjs";
-import "dayjs/locale/zh-cn";
-import "./index.css";
+import React, { memo, useMemo } from 'react';
+import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+import './index.css';
 function format(d) {
     const date = dayjs(d);
-    return date.format('MM-DD') + " " + date.locale('zh-cn').format('ddd');
+    return date.format('MM-DD') + ' ' + date.locale('zh-cn').format('ddd');
 }
 const Deatil = memo(function Deatil(props) {
     const {
@@ -16,7 +16,7 @@ const Deatil = memo(function Deatil(props) {
         departStation,
         arriveStation,
         durationStr,
-        trainNumber
+        trainNumber,
     } = props;
     const departDateStr = useMemo(() => format(departDate), [departDate]);
     const arriveDateStr = useMemo(() => format(arriveDate), [arriveDate]);
@@ -31,9 +31,7 @@ const Deatil = memo(function Deatil(props) {
                 </div>
                 <div className="middle">
                     <p className="train-name">{trainNumber}</p>
-                    <p className="train-mid">
-                        {props.children}
-                    </p>
+                    <p className="train-mid">{props.children}</p>
                     <span className="train-time">耗时{durationStr}</span>
                 </div>
                 <div className="right">
@@ -43,8 +41,8 @@ const Deatil = memo(function Deatil(props) {
                 </div>
             </div>
         </div>
-    )
-})
+    );
+});
 Deatil.propTypes = {
     departDate: PropTypes.number.isRequired,
     arriveDate: PropTypes.number.isRequired,
@@ -53,6 +51,6 @@ Deatil.propTypes = {
     departStation: PropTypes.string.isRequired,
     arriveStation: PropTypes.string.isRequired,
     durationStr: PropTypes.string,
-    trainNumber: PropTypes.string.isRequired
-}
+    trainNumber: PropTypes.string.isRequired,
+};
 export default Deatil;

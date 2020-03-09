@@ -1,5 +1,5 @@
-import * as ActionTypes from "./constants";
-import { h0 } from "./../../common/units/fp";
+import * as ActionTypes from './constants';
+import { h0 } from './../../common/units/fp';
 export function setFrom(from) {
     return {
         type: ActionTypes.ACTION_SET_FROM,
