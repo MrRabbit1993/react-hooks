@@ -182,7 +182,7 @@ export function removePassenger(id) {
         const { passengers } = getState();
 
         const newPassengers = passengers.filter(passenger => {
-            return passenger.id !== id && passenger.followAdult !== id;
+            return passenger.id !== id && passenger.followAdult !== id;//移除了成人，那么儿童也会被移除
         });
 
         dispatch(setPassengers(newPassengers));

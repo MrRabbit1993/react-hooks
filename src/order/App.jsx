@@ -11,7 +11,7 @@ import Account from "./components/account";
 import Choose from "./components/choose";
 import Passengers from "./components/passengers";
 import Ticket from "./components/ticket";
-import { setDepartStation, setArriveStation, setTrainNumber, setSeatType, setDepartDate, setSearchParsed, fetchInitial,createAdult,createChild } from "./redux/actions";
+import { setDepartStation, setArriveStation, setTrainNumber, setSeatType, setDepartDate, setSearchParsed, fetchInitial,createAdult,createChild,removePassenger,updatePassenger } from "./redux/actions";
 import DepartDate from "../index/components/DepartDate";
 
 function App(props) {
@@ -58,7 +58,9 @@ function App(props) {
 
     const passengersCallBacks = useMemo(()=>bindActionCreators({
         createAdult,
-        createChild
+        createChild,
+        removePassenger,
+        updatePassenger
     },dispatch),[])
 
     if (!searchParsed) return null;
