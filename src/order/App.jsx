@@ -1,5 +1,6 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useMemo } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import URI from "urijs";
 import dayjs from "dayjs";
 import "./App.css";
@@ -8,10 +9,11 @@ import Header from "./../common/components/Header";
 import Detail from "./../common/components/detail";
 import Account from "./components/account";
 import Choose from "./components/choose";
-import Passenger from "./components/passenger";
+import Passengers from "./components/passengers";
 import Ticket from "./components/ticket";
-import { setDepartStation, setArriveStation, setTrainNumber, setSeatType, setDepartDate, setSearchParsed, fetchInitial } from "./redux/actions";
+import { setDepartStation, setArriveStation, setTrainNumber, setSeatType, setDepartDate, setSearchParsed, fetchInitial,createAdult,createChild } from "./redux/actions";
 import DepartDate from "../index/components/DepartDate";
+
 function App(props) {
     const {
         trainNumber,
@@ -53,6 +55,12 @@ function App(props) {
             .setSearch('type', seatType).setSearch('date', dayjs(DepartDate).format("YYYY-MM-DD").toString());
         dispatch(fetchInitial(url));
     }, [searchParsed, departStation, arriveStation, seatType, DepartDate])
+
+    const passengersCallBacks = useMemo(()=>bindActionCreators({
+        createAdult,
+        createChild
+    },dispatch),[])
+
     if (!searchParsed) return null;
     return (
         <div className="app">
@@ -70,9 +78,11 @@ function App(props) {
                     durationStr={durationStr}
                     trainNumber={trainNumber}
                 >
-                    <span className="train-icon" style={{display:'block'}}></span>
+                    <span className="train-icon" style={{ display: 'block' }}></span>
                 </Detail>
             </div>
+            <Ticket price={price} type={seatType} />
+            <Passengers {...passengersCallBacks} passengers={passengers}/>
         </div>
     )
 }

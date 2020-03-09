@@ -107,6 +107,7 @@ export function fetchInitial(url) {
 
 let passengerIdSeed = 0;
 
+//成人点击购票
 export function createAdult() {
     return (dispatch, getState) => {
         const { passengers } = getState();
@@ -134,12 +135,12 @@ export function createAdult() {
         );
     };
 }
-
+//添加儿童
 export function createChild() {
     return (dispatch, getState) => {
         const { passengers } = getState();
 
-        let adultFound = null;
+        let adultFound = null;//关联成人id
 
         for (let passenger of passengers) {
             const keys = Object.keys(passenger);
