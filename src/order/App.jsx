@@ -12,9 +12,11 @@ import Choose from "./components/choose";
 import Passengers from "./components/passengers";
 import Ticket from "./components/ticket";
 import Menu from "./components/menu";
-import { setDepartStation, setArriveStation, setTrainNumber, setSeatType, 
-    setDepartDate, setSearchParsed, fetchInitial,createAdult,createChild,
-    removePassenger,updatePassenger,hideMenu,showGenderMenu,showFollowAdultMenu,showTicketTypeMenu } from "./redux/actions";
+import {
+    setDepartStation, setArriveStation, setTrainNumber, setSeatType,
+    setDepartDate, setSearchParsed, fetchInitial, createAdult, createChild,
+    removePassenger, updatePassenger, hideMenu, showGenderMenu, showFollowAdultMenu, showTicketTypeMenu
+} from "./redux/actions";
 import DepartDate from "../index/components/DepartDate";
 
 function App(props) {
@@ -59,7 +61,7 @@ function App(props) {
         dispatch(fetchInitial(url));
     }, [searchParsed, departStation, arriveStation, seatType, DepartDate])
 
-    const passengersCallBacks = useMemo(()=>bindActionCreators({
+    const passengersCallBacks = useMemo(() => bindActionCreators({
         createAdult,
         createChild,
         removePassenger,
@@ -67,11 +69,15 @@ function App(props) {
         showGenderMenu,
         showFollowAdultMenu,
         showTicketTypeMenu
-    },dispatch),[])
+    }, dispatch), [])
 
-    const menuCallBacks = useMemo(()=>bindActionCreators({
+    const menuCallBacks = useMemo(() => bindActionCreators({
         hideMenu
-    },dispatch),[])
+    }, dispatch), [])
+
+    const chooseCallBack = useMemo(() => bindActionCreators({
+        updatePassenger
+    }, dispatch), [])
 
     if (!searchParsed) return null;
     return (
@@ -94,8 +100,12 @@ function App(props) {
                 </Detail>
             </div>
             <Ticket price={price} type={seatType} />
-            <Passengers {...passengersCallBacks} passengers={passengers}/>
-            <Menu show={isMenuVisible} {...menu} {...menuCallBacks}/>
+            <Passengers {...passengersCallBacks} passengers={passengers} />
+            {passengers.length > 0 && <Choose
+                passengers={passengers}
+                {...chooseCallBack}
+            />}
+            <Menu show={isMenuVisible} {...menu} {...menuCallBacks} />
         </div>
     )
 }
