@@ -11,7 +11,10 @@ import Account from "./components/account";
 import Choose from "./components/choose";
 import Passengers from "./components/passengers";
 import Ticket from "./components/ticket";
-import { setDepartStation, setArriveStation, setTrainNumber, setSeatType, setDepartDate, setSearchParsed, fetchInitial,createAdult,createChild,removePassenger,updatePassenger } from "./redux/actions";
+import Menu from "./components/menu";
+import { setDepartStation, setArriveStation, setTrainNumber, setSeatType, 
+    setDepartDate, setSearchParsed, fetchInitial,createAdult,createChild,
+    removePassenger,updatePassenger,hideMenu,showGenderMenu,showFollowAdultMenu,showTicketTypeMenu } from "./redux/actions";
 import DepartDate from "../index/components/DepartDate";
 
 function App(props) {
@@ -60,7 +63,14 @@ function App(props) {
         createAdult,
         createChild,
         removePassenger,
-        updatePassenger
+        updatePassenger,
+        showGenderMenu,
+        showFollowAdultMenu,
+        showTicketTypeMenu
+    },dispatch),[])
+
+    const menuCallBacks = useMemo(()=>bindActionCreators({
+        hideMenu
     },dispatch),[])
 
     if (!searchParsed) return null;
@@ -85,6 +95,7 @@ function App(props) {
             </div>
             <Ticket price={price} type={seatType} />
             <Passengers {...passengersCallBacks} passengers={passengers}/>
+            <Menu show={isMenuVisible} {...menu} {...menuCallBacks}/>
         </div>
     )
 }

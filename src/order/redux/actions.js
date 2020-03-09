@@ -216,7 +216,7 @@ export function showMenu(menu) {
         dispatch(setIsMenuVisible(true));
     };
 }
-
+//性别弹出层
 export function showGenderMenu(id) {
     return (dispatch, getState) => {
         const { passengers } = getState();
@@ -244,7 +244,7 @@ export function showGenderMenu(id) {
                         value: 'female',
                         active: 'female' === passenger.gender,
                     },
-                ],
+                ]
             })
         );
     };
@@ -305,11 +305,8 @@ export function showTicketTypeMenu(id) {
                             )
                         );
                     } else {
-                        const adult = passengers.find(
-                            passenger =>
-                                passenger.id === id &&
-                                passenger.ticketType === 'adult'
-                        );
+                        // const adult = passengers.find(passenger =>passenger.id === id &&passenger.ticketType === 'adult' );
+                        const adult = passengers.find(passenger =>passenger.id !== id &&passenger.ticketType === 'adult' );
 
                         if (adult) {
                             dispatch(
