@@ -105,6 +105,7 @@ function App(props) {
                 passengers={passengers}
                 {...chooseCallBack}
             />}
+            <Account length={passengers.length} price={price} />
             <Menu show={isMenuVisible} {...menu} {...menuCallBacks} />
         </div>
     )
